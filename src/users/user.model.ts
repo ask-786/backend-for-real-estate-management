@@ -1,12 +1,13 @@
 import * as mongoose from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 export const UserSchema = new mongoose.Schema(
   {
-    firstName: {
+    firstname: {
       type: String,
       required: true,
     },
-    lastName: {
+    lastname: {
       type: String,
       required: true,
     },
@@ -16,7 +17,7 @@ export const UserSchema = new mongoose.Schema(
       required: true,
     },
     phone: {
-      type: String,
+      type: Number,
       unique: true,
       required: true,
     },
@@ -26,15 +27,14 @@ export const UserSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      required: true,
     },
     profilePicture: {
       type: String,
     },
-    aboutMe: {
+    aboutme: {
       type: String,
     },
-    isBlocked: {
+    isblocked: {
       type: Boolean,
       default: false,
     },
@@ -43,6 +43,21 @@ export const UserSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+UserSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
+    next();
+  } else {
+    bcrypt.hash(this.password, 10, (err, hashedPassword) => {
+      if (err) {
+        throw new Error('Something went wrong while securing your password');
+      } else {
+        this.password = hashedPassword;
+        next();
+      }
+    });
+  }
+});
 
 export interface UserModel {
   firstname: string;
@@ -54,4 +69,12 @@ export interface UserModel {
   profilePicture: string;
   aboutMe: string;
   isBlocked: boolean;
+}
+
+export interface UserRegistrationForm {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  password: string;
 }
