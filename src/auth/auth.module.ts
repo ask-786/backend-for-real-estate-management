@@ -1,3 +1,4 @@
+import { jwtConstants } from './jwt.constants';
 import { JwtStrategy } from './jwt.strategy';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -12,7 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: 'something',
+      secret: jwtConstants.ACCESS_TOKEN_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
   ],
