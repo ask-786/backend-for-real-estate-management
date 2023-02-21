@@ -39,4 +39,4 @@ lerna-debug.log*
 
 
 # Constants
-src/auth/jwt.constants.ts
+/src/auth/jwt.constants.ts
