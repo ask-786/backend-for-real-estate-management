@@ -23,16 +23,34 @@ POST http://localhost:3000/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "something@yahoo.com",
+    "username": "96567294",
     "password": "Ahmad Shabeer K"
 }
 
 
 ###
 GET http://localhost:3000/property/hello HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2VjNzA2MDlkM2ZlOWUxMDZkYWVmMmEiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0bmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NjQ0NTM2NiwiZXhwIjoxNjc2NDQ1NDI2fQ.YpE-uJWz2Rg6ePfNf2_9w7rAaJUzXMUn6Ob_-RJMdhs
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2Y2MDI1MmJiNDUzNDc1OWI5M2FjZDkiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0bmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NzA2OTYyMiwiZXhwIjoxNjc3MDY5NjgyfQ.RVjzQJykRTCiojp4VxfznQedvmpby7ekCoy_bYcFxYw
 
 ###
 GET http://localhost:3000/auth/hello HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2VjNzA2MDlkM2ZlOWUxMDZkYWVmMmEiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0TmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NjQ0MDIyMywiZXhwIjoxNjc2NDQwMjgzfQ.zBuy7bM7NV1bxBRfnsHJjSXu06c7VE5XdGMoctFPHaI
+
+###
+
+POST http://localhost:3000/auth/login HTTP/1.1
+Content-Type: application/application/json
+
+{
+    "username": "96567294",
+    "password":"something"
+}
+
+###
+
+POST http://localhost:3000/auth/signup HTTP/1.1
+Content-Type: application/application/json
+
+{
+    "name": "something"
+}

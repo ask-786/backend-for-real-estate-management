@@ -14,8 +14,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userService.findUser(username);
+  async validateUser(id: string, password: string) {
+    const user = await this.userService.findUser(id);
     if (user === null) {
       throw new BadRequestException('Couldnt find user');
     } else {
@@ -44,11 +44,7 @@ export class AuthService {
   }
 
   async registerUser(user: any) {
-    try {
-      const result = await this.userService.addUser(user);
-      return { status: true, result };
-    } catch (err) {
-      return new BadRequestException('User already exists');
-    }
+    const result = await this.userService.addUser(user);
+    return { status: true, result };
   }
 }
