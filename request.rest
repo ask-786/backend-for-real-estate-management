@@ -29,8 +29,24 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/property/hello HTTP/1.1
+
+GET http://localhost:3000/property HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2Y2MDI1MmJiNDUzNDc1OWI5M2FjZDkiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0bmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NzA2OTYyMiwiZXhwIjoxNjc3MDY5NjgyfQ.RVjzQJykRTCiojp4VxfznQedvmpby7ekCoy_bYcFxYw
+
+###
+
+GET http://localhost:3000/property/63f6423edd3e2d7cc8dbf992 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2Y2MDI1MmJiNDUzNDc1OWI5M2FjZDkiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0bmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NzA2OTYyMiwiZXhwIjoxNjc3MDY5NjgyfQ.RVjzQJykRTCiojp4VxfznQedvmpby7ekCoy_bYcFxYw
+
+###
+
+POST http://localhost:3000/property/add-property HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWV0aGluZ0B5YWhvby5jb20iLCJfaWQiOiI2M2Y2MDI1MmJiNDUzNDc1OWI5M2FjZDkiLCJwaG9uZSI6OTY1NjcyOTQsImZpcnN0bmFtZSI6ImhlbGxvIiwibGFzdG5hbWUiOiJoZWxsbyBhZ2FpbiIsImlhdCI6MTY3NzA2OTYyMiwiZXhwIjoxNjc3MDY5NjgyfQ.RVjzQJykRTCiojp4VxfznQedvmpby7ekCoy_bYcFxYw
+Content-Type: application/json
+
+{
+    "name":"land"
+}
 
 ###
 GET http://localhost:3000/auth/hello HTTP/1.1

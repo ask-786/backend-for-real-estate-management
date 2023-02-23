@@ -1,25 +1,39 @@
+import { BadRequestException } from '@nestjs/common';
 import { Document, FilterQuery, Model } from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
-  findOne(
+  async findOne(
     entityFilterQuery: FilterQuery<T>,
     projection?: Record<string, unknown>,
   ): Promise<T | null> {
-    return this.entityModel
-      .findOne(entityFilterQuery, {
-        __v: 0,
-        ...projection,
-      })
-      .exec();
+    try {
+      return await this.entityModel
+        .findOne(entityFilterQuery, {
+          __v: 0,
+          ...projection,
+        })
+        .exec();
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
-  find(entityFilterQuery: FilterQuery<T>): Promise<T[] | null> {
-    return this.entityModel.find(entityFilterQuery).exec();
+  async find(entityFilterQuery: FilterQuery<T>): Promise<T[] | null> {
+    try {
+      return await this.entityModel.find(entityFilterQuery).exec();
+    } catch (err) {
+      throw new BadRequestException('Something went wrong');
+    }
   }
 
-  create(createEntityData: unknown): Promise<T> {
+  async create(createEntityData: unknown): Promise<T> {
     const entity = new this.entityModel(createEntityData);
-    return entity.save();
+    try {
+      return await entity.save();
+    } catch (err) {
+      console.log(err.message);
+      throw new BadRequestException('Data Is not valid');
+    }
   }
 }

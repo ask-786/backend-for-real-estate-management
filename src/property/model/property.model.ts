@@ -1,4 +1,6 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { User } from 'src/users/model/user.model';
 
 const AddressSchema = new mongoose.Schema({
   country: {
@@ -17,7 +19,7 @@ const AddressSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  streedAddress: {
+  streetAddress: {
     type: String,
     required: true,
   },
@@ -27,41 +29,58 @@ const AddressSchema = new mongoose.Schema({
   },
 });
 
-export const PropertySchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  description: {
-    type: String,
-    requried: true,
-  },
-  tags: {
-    type: [String],
-  },
-  corodeinates: {
-    type: Object,
-    required: true,
-  },
-  images: {
-    type: [String],
-    required: true,
-  },
-  propertyType: {
-    type: String,
-    enum: ['land', 'property'],
-  },
-  isAvailable: {
-    type: Boolean,
-    default: true,
-  },
-  owner: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-  },
-  address: AddressSchema,
-});
+export enum propertyType {
+  land = 'land',
+  property = 'property',
+}
+
+export interface coOrdinates {
+  lattitude: number;
+  longitude: number;
+}
+
+@Schema({ timestamps: true })
+export class Property {
+  @Prop({ required: true })
+  title: string;
+
+  @Prop({ required: true })
+  price: number;
+
+  @Prop({ required: true })
+  description: string;
+
+  @Prop({ required: true, type: [String] })
+  tags: string[];
+
+  @Prop({ required: true, type: Object })
+  coOrdinates: coOrdinates;
+
+  @Prop({ required: true, type: [String] })
+  images: string[];
+
+  @Prop({ required: true, type: String, enum: ['land', 'property'] })
+  propertyType: propertyType;
+
+  @Prop({ default: true })
+  isAvailable: boolean;
+
+  @Prop({ required: true, type: mongoose.Types.ObjectId, ref: User.name })
+  owner: mongoose.Types.ObjectId;
+
+  @Prop({ required: true, type: AddressSchema })
+  address: object;
+}
+
+export const PropertySchema = SchemaFactory.createForClass(Property);
+
+export type PropertyDocument = Property & mongoose.Document;
+
+export interface propertyAddressType {
+  country: string;
+  state: string;
+  district: string;
+  city: string;
+  streetAddress: string;
+  zipCode: string;
+}
