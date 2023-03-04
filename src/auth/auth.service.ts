@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -38,13 +39,23 @@ export class AuthService {
     };
 
     return {
+      user,
       status: true,
       access_token: this.jwtService.sign(payload),
     };
   }
 
   async registerUser(user: any) {
-    const result = await this.userService.addUser(user);
-    return { status: true, result };
+    const isExists = await this.userService.userExists(user.phone, user.email);
+    if (isExists === null) {
+      const result = await this.userService.addUser(user);
+      return {
+        status: true,
+        user: result,
+        message: 'User Successfully registered',
+      };
+    } else {
+      throw new ConflictException('User alread exists');
+    }
   }
 }

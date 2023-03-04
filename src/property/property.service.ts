@@ -1,19 +1,24 @@
 import { PropertyRepository } from './repository/property.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PropertyDocument } from './model/property.model';
 
 @Injectable()
 export class PropertyService {
   constructor(private propertyRepository: PropertyRepository) {}
-  getProperties(): Promise<PropertyDocument[]> {
-    return this.propertyRepository.find({});
+  getProperties(skip: number): Promise<PropertyDocument[]> {
+    return this.propertyRepository.paginatedFind({}, skip, 8);
   }
 
-  getProperty(_id: string): Promise<PropertyDocument> {
-    return this.propertyRepository.findOne({ _id });
+  async getProperty(_id: string): Promise<PropertyDocument> {
+    const property = await this.propertyRepository.findOne({ _id });
+    console.log(property);
+    if (property !== null) {
+      return property;
+    }
+    throw new NotFoundException('Property Not Found');
   }
 
-  createProperty(data) {
+  createProperty(data: unknown) {
     return this.propertyRepository.create(data);
   }
 }

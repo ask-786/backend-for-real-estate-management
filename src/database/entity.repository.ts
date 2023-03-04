@@ -1,8 +1,13 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Document, FilterQuery, Model } from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
+
   async findOne(
     entityFilterQuery: FilterQuery<T>,
     projection?: Record<string, unknown>,
@@ -15,7 +20,31 @@ export abstract class EntityRepository<T extends Document> {
         })
         .exec();
     } catch (err) {
-      throw new BadRequestException();
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  async paginatedFind(
+    entityFilterQuery: FilterQuery<T>,
+    skip: number,
+    limit: number,
+  ): Promise<T[] | null> {
+    try {
+      return await this.entityModel
+        .find(entityFilterQuery)
+        .skip(skip * limit)
+        .limit(limit)
+        .exec();
+    } catch (err) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
+  async exists(entityFilterQuery: FilterQuery<T>) {
+    try {
+      return await this.entityModel.exists(entityFilterQuery).exec();
+    } catch (err) {
+      throw new InternalServerErrorException('Something went wrong !!');
     }
   }
 
@@ -32,8 +61,7 @@ export abstract class EntityRepository<T extends Document> {
     try {
       return await entity.save();
     } catch (err) {
-      console.log(err.message);
-      throw new BadRequestException('Data Is not valid');
+      throw new ConflictException(err._message);
     }
   }
 }

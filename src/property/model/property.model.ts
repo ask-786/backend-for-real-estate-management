@@ -31,7 +31,9 @@ const AddressSchema = new mongoose.Schema({
 
 export enum propertyType {
   land = 'land',
-  property = 'property',
+  residential = 'residential',
+  commercial = 'commercial',
+  industrial = 'industrial',
 }
 
 export interface coOrdinates {
@@ -59,7 +61,11 @@ export class Property {
   @Prop({ required: true, type: [String] })
   images: string[];
 
-  @Prop({ required: true, type: String, enum: ['land', 'property'] })
+  @Prop({
+    required: true,
+    type: String,
+    enum: ['land', 'residential', 'commercial', 'industrial'],
+  })
   propertyType: propertyType;
 
   @Prop({ default: true })

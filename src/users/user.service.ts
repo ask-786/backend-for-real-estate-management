@@ -1,6 +1,10 @@
 import { UserRepository } from './repository/user.repository';
 import { UserRegistrationData } from './model/user.model';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -17,7 +21,15 @@ export class UserService {
     try {
       return await this.userRepository.create(user);
     } catch (err) {
-      throw new BadRequestException('Got invalid data');
+      throw new BadRequestException(err.message);
+    }
+  }
+
+  async userExists(phone: number, email: string) {
+    try {
+      return await this.userRepository.exists({ $or: [{ phone }, { email }] });
+    } catch (err) {
+      throw new InternalServerErrorException('something went wrong');
     }
   }
 }
