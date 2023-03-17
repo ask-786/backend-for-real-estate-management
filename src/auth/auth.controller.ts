@@ -1,6 +1,8 @@
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +27,14 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async postLogin(@Req() req: any) {
+  async postLogin(@Req() req: Request) {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('check-auth')
+  checkAuth(@Req() req: Request) {
+    const token = req.headers.authorization.split(' ')[1];
+    return { user: req.user, token: token };
   }
 }

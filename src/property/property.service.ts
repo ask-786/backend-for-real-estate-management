@@ -11,7 +11,6 @@ export class PropertyService {
 
   async getProperty(_id: string): Promise<PropertyDocument> {
     const property = await this.propertyRepository.findOne({ _id });
-    console.log(property);
     if (property !== null) {
       return property;
     }
@@ -20,5 +19,20 @@ export class PropertyService {
 
   createProperty(data: unknown) {
     return this.propertyRepository.create(data);
+  }
+
+  getOwnProperties(id: string) {
+    return this.propertyRepository.find({ owner: id });
+  }
+
+  async deleteProperty(
+    _id: string,
+  ): Promise<{ deletedPropertyId: string | null }> {
+    const deleted = await this.propertyRepository.deleteOne({ _id });
+    if (deleted.acknowledged) {
+      return { deletedPropertyId: _id };
+    } else {
+      throw new NotFoundException('Property Not Found');
+    }
   }
 }

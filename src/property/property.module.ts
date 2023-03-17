@@ -12,5 +12,6 @@ import { AwsService } from './aws/aws.service';
   imports: [
     MongooseModule.forFeature([{ name: 'Property', schema: PropertySchema }]),
   ],
+  exports: [PropertyService],
 })
 export class PropertyModule {}

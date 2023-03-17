@@ -3,7 +3,8 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Document, FilterQuery, Model } from 'mongoose';
+import { Document, FilterQuery, InferId, Model } from 'mongoose';
+import {} from '@nestjs/mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -40,7 +41,9 @@ export abstract class EntityRepository<T extends Document> {
     }
   }
 
-  async exists(entityFilterQuery: FilterQuery<T>) {
+  async exists(
+    entityFilterQuery: FilterQuery<T>,
+  ): Promise<{ _id: InferId<T> }> {
     try {
       return await this.entityModel.exists(entityFilterQuery).exec();
     } catch (err) {
@@ -62,6 +65,14 @@ export abstract class EntityRepository<T extends Document> {
       return await entity.save();
     } catch (err) {
       throw new ConflictException(err._message);
+    }
+  }
+
+  async deleteOne(entityDeleteQuery: FilterQuery<T>) {
+    try {
+      return this.entityModel.deleteOne(entityDeleteQuery);
+    } catch (err) {
+      throw new InternalServerErrorException('Something went wrong');
     }
   }
 }

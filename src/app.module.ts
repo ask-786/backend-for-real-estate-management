@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
+import { EnquiryModule } from './enquiry/enquiry.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PropertyModule } from './property/property.module';
     MongooseModule.forRoot(process.env.LOCAL_DB),
     AuthModule,
     PropertyModule,
+    EnquiryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

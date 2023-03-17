@@ -6,9 +6,10 @@ import {
   Request,
   Get,
   Param,
-  Post,
   UseGuards,
   Query,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import {
   coOrdinates as cordType,
@@ -34,6 +35,11 @@ export class PropertyController {
     return this.propertyService.getProperty(id);
   }
 
+  @Delete('property/:id')
+  deleteProperty(@Param('id') id: string) {
+    return this.propertyService.deleteProperty(id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('get-s3-upload-url')
   getS3UploadUrl() {
@@ -41,7 +47,7 @@ export class PropertyController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('add-property')
+  @Put('add-property')
   createProperty(
     @Body('title') title: string,
     @Body('price') price: number,
@@ -66,5 +72,11 @@ export class PropertyController {
       address,
       owner: req.user._id,
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-own-properties')
+  async getOwnProperties(@Request() req) {
+    return await this.propertyService.getOwnProperties(req.user._id);
   }
 }
