@@ -9,10 +9,10 @@ export class Enquiry {
   title: string;
 
   @Prop({ required: true, type: mongoose.Types.ObjectId, ref: User.name })
-  sender: string;
+  sender: mongoose.Types.ObjectId;
 
   @Prop({ required: true, type: mongoose.Types.ObjectId, ref: User.name })
-  propertyOwner: string;
+  propertyOwner: mongoose.Types.ObjectId;
 
   @Prop({ required: true, type: String })
   senderEmail: string;
@@ -21,7 +21,7 @@ export class Enquiry {
   content: string;
 
   @Prop({ type: mongoose.Types.ObjectId, ref: Property.name, required: true })
-  property: string;
+  property: mongoose.Types.ObjectId;
 
   @Prop({ type: String, required: true })
   topic: string;

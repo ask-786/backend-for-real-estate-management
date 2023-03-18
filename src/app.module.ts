@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
 import { EnquiryModule } from './enquiry/enquiry.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EnquiryModule } from './enquiry/enquiry.module';
     AuthModule,
     PropertyModule,
     EnquiryModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
