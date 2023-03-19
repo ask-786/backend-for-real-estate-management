@@ -1,16 +1,22 @@
 import { FavoritesRepository } from './repository/favorites.repository';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import mongoose from 'mongoose';
+import { Property } from 'src/property/model/property.model';
 
 @Injectable()
 export class FavoritesService {
   constructor(private favoritesRepository: FavoritesRepository) {}
 
   async getFavoriteProperties(userId: string) {
-    return await this.favoritesRepository.findOnePopulate(
+    return await this.favoritesRepository.findOneAndPopulate(
       {
         user: new mongoose.Types.ObjectId(userId),
       },
+      { path: 'favoriteProperties', model: Property.name },
       { favoriteProperties: 1, _id: 0 },
     );
   }
@@ -27,14 +33,51 @@ export class FavoritesService {
       } else {
         exists.favoriteProperties.push(new mongoose.Types.ObjectId(propertyId));
         const result = await exists.save();
-        return { result, message: 'Successfully added to favorites' };
+        return {
+          result,
+          message: 'Successfully added to favorites',
+          id: propertyId,
+        };
       }
     } else {
       const result = await this.favoritesRepository.create({
         user: new mongoose.Types.ObjectId(userId),
         favoriteProperties: new mongoose.Types.ObjectId(propertyId),
       });
-      return { result, message: 'Successfully added to favorites' };
+      return {
+        result,
+        message: 'Successfully added to favorites',
+        id: propertyId,
+      };
     }
+  }
+
+  async removeFromFavorites(propertyId: string, userId: string) {
+    const result = await this.favoritesRepository.updateOne(
+      {
+        user: new mongoose.Types.ObjectId(userId),
+      },
+      {
+        $pull: { favoriteProperties: new mongoose.Types.ObjectId(propertyId) },
+      },
+    );
+    if (result.modifiedCount > 0) {
+      return {
+        result,
+        message: 'Successfully removed from favorites',
+        id: propertyId,
+      };
+    } else {
+      throw new BadRequestException("Couldn't found the Property");
+    }
+  }
+
+  async getFavoriteIds(userId: string) {
+    return await this.favoritesRepository.findOne(
+      {
+        user: new mongoose.Types.ObjectId(userId),
+      },
+      { createdAt: 0, updatedAt: 0, _id: 0 },
+    );
   }
 }

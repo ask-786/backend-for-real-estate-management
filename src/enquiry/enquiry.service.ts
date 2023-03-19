@@ -1,3 +1,4 @@
+import { Property } from './../property/model/property.model';
 import { EnquiryRequestData } from './model/enquiryRequest.interface';
 import { PropertyService } from './../property/property.service';
 import { EnquiryRepository } from './repository/enquiry.repository';
@@ -16,9 +17,13 @@ export class EnquiryService {
   ) {}
 
   async getUserEnquiries(userId: string) {
-    const enquiries = await this.enquiryRepostory.find({
-      propertyOwner: new mongoose.Types.ObjectId(userId),
-    });
+    const enquiries = await this.enquiryRepostory.findAndPopulate(
+      {
+        propertyOwner: new mongoose.Types.ObjectId(userId),
+      },
+      { path: 'property', model: Property.name },
+    );
+    console.log(enquiries);
     return { enquiries };
   }
 

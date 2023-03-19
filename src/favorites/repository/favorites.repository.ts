@@ -3,7 +3,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { Favorites, FavoritesDocument } from './../model/favorites.model';
 import { EntityRepository } from 'src/database/entity.repository';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PopulateOptions } from 'mongoose';
 
 export class FavoritesRepository extends EntityRepository<FavoritesDocument> {
   favoritesModel: Model<FavoritesDocument>;
@@ -14,8 +14,9 @@ export class FavoritesRepository extends EntityRepository<FavoritesDocument> {
     this.favoritesModel = favoritesModel;
   }
 
-  async findOnePopulate(
+  async findOneAndPopulate(
     entityFilterQuery: FilterQuery<FavoritesDocument>,
+    populateOptions: PopulateOptions,
     projection?: Record<string, number>,
   ): Promise<FavoritesDocument | null> {
     try {
@@ -23,10 +24,9 @@ export class FavoritesRepository extends EntityRepository<FavoritesDocument> {
         .findOne(entityFilterQuery, {
           ...projection,
         })
-        .populate({ path: 'favoriteProperties', model: Property.name })
+        .populate(populateOptions)
         .exec();
     } catch (err) {
-      console.log(err);
       throw new InternalServerErrorException('Something went wrong');
     }
   }

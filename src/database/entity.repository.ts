@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -20,7 +19,7 @@ export abstract class EntityRepository<T extends Document> {
         })
         .exec();
     } catch (err) {
-      throw new BadRequestException(err.message);
+      throw new InternalServerErrorException(err.message);
     }
   }
 

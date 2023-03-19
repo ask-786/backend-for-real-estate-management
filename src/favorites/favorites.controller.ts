@@ -20,8 +20,20 @@ export class FavoritesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Patch('remove-from-favorites')
+  async removeFromFavorites(@Request() req, @Body('propertyId') id: string) {
+    return await this.favoritesService.removeFromFavorites(id, req.user._id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('get-favorites')
   async getFavoriteProperties(@Request() req) {
     return await this.favoritesService.getFavoriteProperties(req.user._id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-favorite-ids')
+  async getFavoriteIds(@Request() req) {
+    return await this.favoritesService.getFavoriteIds(req.user._id);
   }
 }
