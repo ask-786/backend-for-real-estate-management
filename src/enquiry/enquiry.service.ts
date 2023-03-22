@@ -23,8 +23,17 @@ export class EnquiryService {
       },
       { path: 'property', model: Property.name },
     );
-    console.log(enquiries);
     return { enquiries };
+  }
+
+  async getOneEnquiry(id: string) {
+    const enquiry = await this.enquiryRepostory.findOneAndPopulate(
+      {
+        _id: new mongoose.Types.ObjectId(id),
+      },
+      { path: 'property', model: Property.name },
+    );
+    return { enquiry };
   }
 
   async createEnquiry(

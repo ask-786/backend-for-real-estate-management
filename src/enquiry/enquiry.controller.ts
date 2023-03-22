@@ -1,7 +1,15 @@
 import { EnquiryRequestData } from './model/enquiryRequest.interface';
 import { EnquiryService } from './enquiry.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 
 @Controller('enquiry')
 export class EnquiryController {
@@ -11,6 +19,12 @@ export class EnquiryController {
   @Get('get-enquiries')
   async getUserEnquiries(@Req() req) {
     return await this.enquiryService.getUserEnquiries(req.user._id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('enquiry/:id')
+  async getOneEnquiry(@Param('id') id: string) {
+    return await this.enquiryService.getOneEnquiry(id);
   }
 
   @UseGuards(JwtAuthGuard)

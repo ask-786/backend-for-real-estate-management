@@ -20,4 +20,12 @@ export class EnquiryRepository extends EntityRepository<EnquiryDocument> {
       .find(enquiryFinterQuery)
       .populate(populateOptions);
   }
+  async findOneAndPopulate(
+    enquiryFinterQuery: FilterQuery<EnquiryDocument>,
+    populateOptions: PopulateOptions,
+  ) {
+    return await this.enquiryModel
+      .findOne(enquiryFinterQuery)
+      .populate(populateOptions);
+  }
 }

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
 import { EnquiryModule } from './enquiry/enquiry.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { EnquiryDiscussionModule } from './enquiry-discussion/enquiry-discussion.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     PropertyModule,
     EnquiryModule,
     FavoritesModule,
+    EnquiryDiscussionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
