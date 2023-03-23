@@ -1,3 +1,4 @@
+import { EnquiryDiscussionRepository } from './../enquiry-discussion/repository/enquiry-discussion.repository';
 import { Property } from './../property/model/property.model';
 import { EnquiryRequestData } from './model/enquiryRequest.interface';
 import { PropertyService } from './../property/property.service';
@@ -14,6 +15,7 @@ export class EnquiryService {
   constructor(
     private enquiryRepostory: EnquiryRepository,
     private propertyService: PropertyService,
+    private enquiryDiscussonRepository: EnquiryDiscussionRepository,
   ) {}
 
   async getUserEnquiries(userId: string) {
@@ -26,14 +28,23 @@ export class EnquiryService {
     return { enquiries };
   }
 
+  async getUserSentEnquiries(userId: string) {
+    const enquiries = await this.enquiryRepostory.findAndPopulate(
+      {
+        sender: new mongoose.Types.ObjectId(userId),
+      },
+      { path: 'property', model: Property.name },
+    );
+    return { enquiries };
+  }
+
   async getOneEnquiry(id: string) {
-    const enquiry = await this.enquiryRepostory.findOneAndPopulate(
+    return await this.enquiryRepostory.findOneAndPopulate(
       {
         _id: new mongoose.Types.ObjectId(id),
       },
       { path: 'property', model: Property.name },
     );
-    return { enquiry };
   }
 
   async createEnquiry(
@@ -61,5 +72,11 @@ export class EnquiryService {
     } catch (err) {
       throw new InternalServerErrorException('Something went wrong');
     }
+  }
+
+  async getEnquiryDiscussions(id: string) {
+    return await this.enquiryDiscussonRepository.find({
+      enquiry: new mongoose.Types.ObjectId(id),
+    });
   }
 }

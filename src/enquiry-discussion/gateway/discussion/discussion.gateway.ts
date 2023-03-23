@@ -6,28 +6,41 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { EnquiryDiscussionService } from 'src/enquiry-discussion/enquiry-discussion.service';
 
 @WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
-export class DiscussionGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class DiscussionGateway {
+  constructor(private enquriyDiscussionService: EnquiryDiscussionService) {}
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
+  handleMessage(): string {
     return 'Hello world!';
   }
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: any, ...args: any[]) {
-    console.log('connedted');
-  }
-
-  handleDisconnect(client: any) {
-    console.log('disconnected');
-  }
-
   @SubscribeMessage('sendMessage')
-  subscribeSendMessage(socket: Socket, message: string) {
-    this.server.emit('newMessage', message);
+  subscribeSendMessage(
+    socket: Socket,
+    data: {
+      message: string;
+      enquiryId: string;
+      senderId: string;
+    },
+  ) {
+    this.enquriyDiscussionService
+      .createMessage(data.message, data.enquiryId, data.senderId)
+      .then((newMessage) => {
+        socket.to(data.enquiryId).emit('receiveMessage', newMessage);
+      });
+  }
+
+  @SubscribeMessage('join-room')
+  subscribeJoinRoom(socket: Socket, roomId: string) {
+    socket.join(roomId);
+  }
+
+  @SubscribeMessage('leave-room')
+  subscribeLeaveRoom(socket: Socket, roomId: string) {
+    socket.leave(roomId);
   }
 }

@@ -1,3 +1,5 @@
+import { ChatDocument } from './../enquiry-discussion/model/chat.model';
+import { EnquiryDocument } from './model/enquiry.model';
 import { EnquiryRequestData } from './model/enquiryRequest.interface';
 import { EnquiryService } from './enquiry.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -22,9 +24,19 @@ export class EnquiryController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('get-user-enquiries')
+  async getUserSentEnquiries(@Req() req) {
+    return await this.enquiryService.getUserSentEnquiries(req.user._id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('enquiry/:id')
   async getOneEnquiry(@Param('id') id: string) {
-    return await this.enquiryService.getOneEnquiry(id);
+    const result = await Promise.all([
+      this.enquiryService.getOneEnquiry(id),
+      this.enquiryService.getEnquiryDiscussions(id),
+    ]);
+    return { enquiry: result[0], discussions: result[1] };
   }
 
   @UseGuards(JwtAuthGuard)

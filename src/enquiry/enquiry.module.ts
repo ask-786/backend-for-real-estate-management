@@ -1,3 +1,4 @@
+import { EnquiryDiscussionModule } from './../enquiry-discussion/enquiry-discussion.module';
 import { PropertyModule } from './../property/property.module';
 import { EnquiryRepository } from './repository/enquiry.repository';
 import { EnquirySchema } from './model/enquiry.model';
@@ -11,6 +12,7 @@ import { EnquiryController } from './enquiry.controller';
   imports: [
     MongooseModule.forFeature([{ name: 'Enquiry', schema: EnquirySchema }]),
     PropertyModule,
+    EnquiryDiscussionModule,
   ],
   controllers: [EnquiryController],
 })
