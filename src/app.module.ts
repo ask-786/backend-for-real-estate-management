@@ -9,6 +9,7 @@ import { PropertyModule } from './property/property.module';
 import { EnquiryModule } from './enquiry/enquiry.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { EnquiryDiscussionModule } from './enquiry-discussion/enquiry-discussion.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EnquiryDiscussionModule } from './enquiry-discussion/enquiry-discussion
     EnquiryModule,
     FavoritesModule,
     EnquiryDiscussionModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

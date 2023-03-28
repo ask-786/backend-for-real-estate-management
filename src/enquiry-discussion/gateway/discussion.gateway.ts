@@ -1,6 +1,4 @@
 import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -8,13 +6,12 @@ import {
 import { Server, Socket } from 'socket.io';
 import { EnquiryDiscussionService } from 'src/enquiry-discussion/enquiry-discussion.service';
 
-@WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
+@WebSocketGateway({
+  cors: { origin: ['http://localhost:4200'] },
+  namespace: '/chat',
+})
 export class DiscussionGateway {
   constructor(private enquriyDiscussionService: EnquiryDiscussionService) {}
-  @SubscribeMessage('message')
-  handleMessage(): string {
-    return 'Hello world!';
-  }
   @WebSocketServer()
   server: Server;
 

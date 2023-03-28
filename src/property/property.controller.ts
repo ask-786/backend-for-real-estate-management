@@ -26,8 +26,11 @@ export class PropertyController {
     private aswService: AwsService,
   ) {}
   @Get()
-  getProperties(@Query('page') page: number): Promise<PropertyDocument[]> {
-    return this.propertyService.getProperties(page);
+  getProperties(
+    @Query('page') page: number,
+    @Query('searchValue') searchValue: string,
+  ): Promise<PropertyDocument[]> {
+    return this.propertyService.getProperties(page, searchValue);
   }
 
   @Get('property/:id')
@@ -72,6 +75,48 @@ export class PropertyController {
       address,
       owner: req.user._id,
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('update-property')
+  updateProperty(
+    @Body('id') id: string,
+    @Body('title') title: string,
+    @Body('price') price: number,
+    @Body('description') description: string,
+    @Body('tags') tags: string,
+    @Body('coOrdinates') coOrdinates: cordType,
+    @Body('images') images: string[],
+    @Body('propertyType') propertyType: propType,
+    @Body('address')
+    address: propertyAddressType,
+    @Request() req,
+  ) {
+    const splittedTags: string[] = tags.trim().split(',');
+    if (images) {
+      return this.propertyService.updateProperty(id, {
+        title,
+        price,
+        description,
+        tags: splittedTags,
+        coOrdinates,
+        images,
+        propertyType,
+        address,
+        owner: req.user._id,
+      });
+    } else {
+      return this.propertyService.updateProperty(id, {
+        title,
+        price,
+        description,
+        tags: splittedTags,
+        coOrdinates,
+        propertyType,
+        address,
+        owner: req.user._id,
+      });
+    }
   }
 
   @UseGuards(JwtAuthGuard)

@@ -87,4 +87,21 @@ export abstract class EntityRepository<T extends Document> {
       throw new InternalServerErrorException('Something went wrong');
     }
   }
+
+  async findOneAndUpdate(
+    entityUpdateQuery: FilterQuery<T>,
+    entityUpdateData: UpdateQuery<T>,
+  ) {
+    try {
+      return await this.entityModel.findOneAndUpdate(
+        entityUpdateQuery,
+        entityUpdateData,
+        {
+          new: true,
+        },
+      );
+    } catch (err) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+  }
 }

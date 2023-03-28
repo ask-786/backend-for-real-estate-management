@@ -1,7 +1,7 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { EnquiryDiscussionRepository } from './repository/enquiry-discussion.repository';
 import { Module } from '@nestjs/common';
-import { DiscussionGateway } from './gateway/discussion/discussion.gateway';
+import { DiscussionGateway } from './gateway/discussion.gateway';
 import { EnquiryDiscussionService } from './enquiry-discussion.service';
 import { ChatSchema } from './model/chat.model';
 

@@ -1,3 +1,4 @@
+import { FavoritesDocument } from './model/favorites.model';
 import { FavoritesRepository } from './repository/favorites.repository';
 import {
   BadRequestException,
@@ -11,7 +12,7 @@ import { Property } from 'src/property/model/property.model';
 export class FavoritesService {
   constructor(private favoritesRepository: FavoritesRepository) {}
 
-  async getFavoriteProperties(userId: string) {
+  async getFavoriteProperties(userId: string): Promise<FavoritesDocument> {
     return await this.favoritesRepository.findOneAndPopulate(
       {
         user: new mongoose.Types.ObjectId(userId),
@@ -21,7 +22,10 @@ export class FavoritesService {
     );
   }
 
-  async addToFavorites(propertyId: string, userId: string) {
+  async addToFavorites(
+    propertyId: string,
+    userId: string,
+  ): Promise<{ result: FavoritesDocument; message: string; id: string }> {
     const exists = await this.favoritesRepository.findOne({
       user: new mongoose.Types.ObjectId(userId),
     });
@@ -52,7 +56,10 @@ export class FavoritesService {
     }
   }
 
-  async removeFromFavorites(propertyId: string, userId: string) {
+  async removeFromFavorites(
+    propertyId: string,
+    userId: string,
+  ): Promise<{ result: unknown; message: string; id: string }> {
     const result = await this.favoritesRepository.updateOne(
       {
         user: new mongoose.Types.ObjectId(userId),
@@ -72,7 +79,7 @@ export class FavoritesService {
     }
   }
 
-  async getFavoriteIds(userId: string) {
+  async getFavoriteIds(userId: string): Promise<FavoritesDocument> {
     return await this.favoritesRepository.findOne(
       {
         user: new mongoose.Types.ObjectId(userId),

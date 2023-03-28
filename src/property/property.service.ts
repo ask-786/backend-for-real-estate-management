@@ -5,8 +5,27 @@ import { PropertyDocument } from './model/property.model';
 @Injectable()
 export class PropertyService {
   constructor(private propertyRepository: PropertyRepository) {}
-  getProperties(skip: number): Promise<PropertyDocument[]> {
-    return this.propertyRepository.paginatedFind({}, skip, 8);
+  getProperties(
+    skip: number,
+    searchValue?: string,
+  ): Promise<PropertyDocument[]> {
+    if (searchValue) {
+      const regEx = new RegExp(searchValue, 'i');
+      console.log(regEx);
+      return this.propertyRepository.paginatedFind(
+        {
+          $or: [
+            { title: { $regex: regEx } },
+            { description: { $regex: regEx } },
+            { tags: { $regex: regEx } },
+          ],
+        },
+        skip,
+        8,
+      );
+    } else {
+      return this.propertyRepository.paginatedFind({}, skip, 8);
+    }
   }
 
   async getProperty(_id: string): Promise<PropertyDocument> {
@@ -17,12 +36,19 @@ export class PropertyService {
     throw new NotFoundException('Property Not Found');
   }
 
-  createProperty(data: unknown) {
-    return this.propertyRepository.create(data);
+  async createProperty(data: unknown) {
+    return await this.propertyRepository.create(data);
   }
 
-  getOwnProperties(id: string) {
+  async getOwnProperties(id: string) {
     return this.propertyRepository.find({ owner: id });
+  }
+
+  async updateProperty(id: string, data: unknown) {
+    return await this.propertyRepository.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+    );
   }
 
   async deleteProperty(
