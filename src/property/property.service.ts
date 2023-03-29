@@ -11,7 +11,6 @@ export class PropertyService {
   ): Promise<PropertyDocument[]> {
     if (searchValue) {
       const regEx = new RegExp(searchValue, 'i');
-      console.log(regEx);
       return this.propertyRepository.paginatedFind(
         {
           $or: [
