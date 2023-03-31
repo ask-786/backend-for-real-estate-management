@@ -1,3 +1,4 @@
+import { CLIENT_URL } from './../../constants/clientUrl.constants';
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -7,7 +8,7 @@ import { Server, Socket } from 'socket.io';
 import { EnquiryDiscussionService } from 'src/enquiry-discussion/enquiry-discussion.service';
 
 @WebSocketGateway({
-  cors: { origin: ['http://localhost:4200'] },
+  cors: { origin: [CLIENT_URL] },
   namespace: '/chat',
 })
 export class DiscussionGateway {

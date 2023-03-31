@@ -29,8 +29,15 @@ export class PropertyController {
   getProperties(
     @Query('page') page: number,
     @Query('searchValue') searchValue: string,
+    @Query('sortValue') sortValue: string,
+    @Query('filterValue') filterValue: string,
   ): Promise<PropertyDocument[]> {
-    return this.propertyService.getProperties(page, searchValue);
+    return this.propertyService.getProperties(
+      page,
+      searchValue,
+      sortValue,
+      filterValue,
+    );
   }
 
   @Get('property/:id')

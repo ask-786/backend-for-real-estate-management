@@ -1,6 +1,7 @@
+import { FilterQuery } from 'mongoose';
 import { PropertyRepository } from './repository/property.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PropertyDocument } from './model/property.model';
+import { PropertyDocument, sortTypeEnum } from './model/property.model';
 
 @Injectable()
 export class PropertyService {
@@ -8,23 +9,32 @@ export class PropertyService {
   getProperties(
     skip: number,
     searchValue?: string,
+    sortValue?: string,
+    filterValue?: string,
   ): Promise<PropertyDocument[]> {
+    const query: FilterQuery<PropertyDocument> = {};
+    const sortOption = {};
+
     if (searchValue) {
       const regEx = new RegExp(searchValue, 'i');
-      return this.propertyRepository.paginatedFind(
-        {
-          $or: [
-            { title: { $regex: regEx } },
-            { description: { $regex: regEx } },
-            { tags: { $regex: regEx } },
-          ],
-        },
-        skip,
-        8,
-      );
-    } else {
-      return this.propertyRepository.paginatedFind({}, skip, 8);
+      query.$or = [
+        { title: { $regex: regEx } },
+        { description: { $regex: regEx } },
+        { tags: { $regex: regEx } },
+      ];
     }
+
+    if (sortValue !== '' && sortValue !== undefined) {
+      const sort = sortTypeEnum[sortValue];
+      sortOption[sort] = 1;
+    }
+
+    if (filterValue !== '' && filterValue !== undefined) {
+      console.log(filterValue);
+      query.propertyType = { $in: filterValue.split(' ') };
+    }
+
+    return this.propertyRepository.propertyFind(query, skip, 8, sortOption);
   }
 
   async getProperty(_id: string): Promise<PropertyDocument> {

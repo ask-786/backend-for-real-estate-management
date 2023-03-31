@@ -36,6 +36,19 @@ export enum propertyType {
   industrial = 'industrial',
 }
 
+export enum sortTypeEnum {
+  price = 'price',
+  date = 'createdAt',
+  name = 'title',
+}
+
+export interface propertyTypeInterface {
+  land: boolean;
+  residential: boolean;
+  commercial: boolean;
+  industrial: boolean;
+}
+
 export interface coOrdinates {
   lattitude: number;
   longitude: number;
