@@ -89,6 +89,9 @@ export class Property {
 
   @Prop({ required: true, type: AddressSchema })
   address: object;
+
+  @Prop({ type: [mongoose.Types.ObjectId] })
+  enquirers: mongoose.Types.ObjectId[];
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);

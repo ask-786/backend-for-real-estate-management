@@ -1,4 +1,3 @@
-import { Property } from './../../property/model/property.model';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Favorites, FavoritesDocument } from './../model/favorites.model';
 import { EntityRepository } from 'src/database/entity.repository';

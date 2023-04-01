@@ -11,6 +11,7 @@ export class NotificationsService {
   constructor(private notificationRepository: NotificationRepository) {}
 
   async createNotification(
+    title: string,
     content: string,
     from: mongoose.Types.ObjectId,
     user: mongoose.Types.ObjectId,
@@ -18,13 +19,13 @@ export class NotificationsService {
     property: mongoose.Types.ObjectId,
   ): Promise<NotificationDocument> {
     const hello = await this.notificationRepository.create({
+      title,
       content,
       from,
       user,
       type,
       property,
     });
-    console.log(hello);
     return hello;
   }
 }

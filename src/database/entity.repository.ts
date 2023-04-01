@@ -49,6 +49,14 @@ export abstract class EntityRepository<T extends Document> {
     }
   }
 
+  async count(entityFilterQuery: FilterQuery<T>) {
+    try {
+      return await this.entityModel.find(entityFilterQuery).count();
+    } catch (err) {
+      throw new InternalServerErrorException('Something went wrong !!');
+    }
+  }
+
   async find(entityFilterQuery: FilterQuery<T>): Promise<T[] | null> {
     try {
       return await this.entityModel.find(entityFilterQuery).exec();

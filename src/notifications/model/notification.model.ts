@@ -19,6 +19,9 @@ export class Notification {
 
   @Prop({ type: mongoose.Types.ObjectId, required: true, ref: Property.name })
   property: mongoose.Types.ObjectId;
+
+  @Prop({ type: Boolean, default: false })
+  readStatus: boolean;
 }
 
 export enum NotificationTypeEnum {

@@ -22,6 +22,12 @@ export class FavoritesService {
     );
   }
 
+  async getFavoritePropertiesCount(userId: string): Promise<FavoritesDocument> {
+    return await this.favoritesRepository.findOne({
+      user: new mongoose.Types.ObjectId(userId),
+    });
+  }
+
   async addToFavorites(
     propertyId: string,
     userId: string,

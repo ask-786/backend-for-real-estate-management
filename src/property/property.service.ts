@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { PropertyRepository } from './repository/property.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PropertyDocument, sortTypeEnum } from './model/property.model';
@@ -30,7 +30,6 @@ export class PropertyService {
     }
 
     if (filterValue !== '' && filterValue !== undefined) {
-      console.log(filterValue);
       query.propertyType = { $in: filterValue.split(' ') };
     }
 
@@ -57,6 +56,13 @@ export class PropertyService {
     return await this.propertyRepository.findOneAndUpdate(
       { _id: id },
       { $set: data },
+    );
+  }
+
+  async pushEnquirers(id: string, user: string) {
+    return await this.propertyRepository.findOneAndUpdate(
+      { _id: id },
+      { $push: { enquirers: new mongoose.Types.ObjectId(user) } },
     );
   }
 

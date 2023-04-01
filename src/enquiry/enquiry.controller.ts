@@ -1,5 +1,5 @@
-import { ChatDocument } from './../enquiry-discussion/model/chat.model';
-import { EnquiryDocument } from './model/enquiry.model';
+import { NotificationTypeEnum } from './../notifications/model/notification.model';
+import { NotificationsService } from './../notifications/notifications.service';
 import { EnquiryRequestData } from './model/enquiryRequest.interface';
 import { EnquiryService } from './enquiry.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -12,10 +12,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import mongoose from 'mongoose';
 
 @Controller('enquiry')
 export class EnquiryController {
-  constructor(private enquiryService: EnquiryService) {}
+  constructor(
+    private enquiryService: EnquiryService,
+    private notificationService: NotificationsService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('get-enquiries')
@@ -46,6 +50,14 @@ export class EnquiryController {
       body,
       req.user._id,
       req.user.email,
+    );
+    await this.notificationService.createNotification(
+      'New Enquiry',
+      body.content,
+      new mongoose.Types.ObjectId(req.user._id),
+      new mongoose.Types.ObjectId(body.propertyOwner),
+      NotificationTypeEnum['enquiry'],
+      new mongoose.Types.ObjectId(body.property),
     );
     return { createdEnquiry };
   }

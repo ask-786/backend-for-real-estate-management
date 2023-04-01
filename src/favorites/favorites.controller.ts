@@ -32,6 +32,15 @@ export class FavoritesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('get-count')
+  async getFavoritePropertiesCount(@Request() req) {
+    const favorites = await this.favoritesService.getFavoritePropertiesCount(
+      req.user._id,
+    );
+    return { count: favorites.favoriteProperties.length };
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('get-favorite-ids')
   async getFavoriteIds(@Request() req) {
     return await this.favoritesService.getFavoriteIds(req.user._id);

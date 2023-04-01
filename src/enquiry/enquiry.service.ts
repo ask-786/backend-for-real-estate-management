@@ -57,7 +57,7 @@ export class EnquiryService {
         enquiryData.property,
       );
       if (property !== null) {
-        return await this.enquiryRepostory.create({
+        const createdEnquiry = await this.enquiryRepostory.create({
           title: enquiryData.title,
           sender: new mongoose.Types.ObjectId(user),
           propertyOwner: new mongoose.Types.ObjectId(property.owner),
@@ -66,6 +66,8 @@ export class EnquiryService {
           property: property._id,
           topic: enquiryData.topic,
         });
+        await this.propertyService.pushEnquirers(property._id, user);
+        return createdEnquiry;
       } else {
         throw new NotFoundException('Property not found ');
       }
