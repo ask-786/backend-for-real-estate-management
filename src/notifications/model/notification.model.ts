@@ -8,6 +8,9 @@ export class Notification {
   @Prop({ type: String, required: true })
   content: string;
 
+  @Prop({ type: String, required: true })
+  title: string;
+
   @Prop({ type: mongoose.Types.ObjectId, required: true, ref: User.name })
   from: mongoose.Types.ObjectId;
 
