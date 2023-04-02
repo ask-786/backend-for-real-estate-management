@@ -53,11 +53,12 @@ export class EnquiryController {
     );
     await this.notificationService.createNotification(
       'New Enquiry',
-      body.content,
       new mongoose.Types.ObjectId(req.user._id),
       new mongoose.Types.ObjectId(body.propertyOwner),
       NotificationTypeEnum['enquiry'],
       new mongoose.Types.ObjectId(body.property),
+      createdEnquiry._id,
+      body.title,
     );
     return { createdEnquiry };
   }
