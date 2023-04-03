@@ -92,7 +92,6 @@ export abstract class EntityRepository<T extends Document> {
         entityUpdateData,
       );
     } catch (err) {
-      console.log(err);
       throw new InternalServerErrorException('Something went wrong');
     }
   }

@@ -55,7 +55,6 @@ export class NotificationsService {
   }
 
   async changeReadStatus(id: string) {
-    console.log(id);
     return await this.notificationRepository.updateOne(
       {
         _id: new mongoose.Types.ObjectId(id),
