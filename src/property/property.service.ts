@@ -1,13 +1,18 @@
 import mongoose, { FilterQuery } from 'mongoose';
 import { PropertyRepository } from './repository/property.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PropertyDocument, sortTypeEnum } from './model/property.model';
+import {
+  PropertyDocument,
+  ascOrDescEnum,
+  sortTypeEnum,
+} from './model/property.model';
 
 @Injectable()
 export class PropertyService {
   constructor(private propertyRepository: PropertyRepository) {}
   getProperties(
     skip: number,
+    desc: string,
     searchValue?: string,
     sortValue?: string,
     filterValue?: string,
@@ -26,7 +31,7 @@ export class PropertyService {
 
     if (sortValue !== '' && sortValue !== undefined) {
       const sort = sortTypeEnum[sortValue];
-      sortOption[sort] = 1;
+      sortOption[sort] = ascOrDescEnum[desc];
     }
 
     if (filterValue !== '' && filterValue !== undefined) {

@@ -36,7 +36,11 @@ export class FavoritesController {
     const favorites = await this.favoritesService.getFavoritePropertiesCount(
       req.user._id,
     );
-    return { count: favorites.favoriteProperties.length };
+    let count = 0 as number;
+    if (favorites) {
+      count = favorites.favoriteProperties.length;
+    }
+    return { count: count };
   }
 
   @UseGuards(JwtAuthGuard)

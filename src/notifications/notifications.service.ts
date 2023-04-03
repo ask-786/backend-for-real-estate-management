@@ -5,7 +5,7 @@ import {
 } from './model/notification.model';
 import { NotificationRepository } from './repository/notification.repository';
 import { Injectable } from '@nestjs/common';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { Property } from 'src/property/model/property.model';
 import { Enquiry } from 'src/enquiry/model/enquiry.model';
 

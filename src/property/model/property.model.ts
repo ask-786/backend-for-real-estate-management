@@ -42,6 +42,10 @@ export enum sortTypeEnum {
   name = 'title',
 }
 
+export enum ascOrDescEnum {
+  true = -1,
+  false = 1,
+}
 export interface propertyTypeInterface {
   land: boolean;
   residential: boolean;

@@ -28,12 +28,14 @@ export class PropertyController {
   @Get()
   getProperties(
     @Query('page') page: number,
+    @Query('desc') desc: string,
     @Query('searchValue') searchValue: string,
     @Query('sortValue') sortValue: string,
     @Query('filterValue') filterValue: string,
   ): Promise<PropertyDocument[]> {
     return this.propertyService.getProperties(
       page,
+      desc,
       searchValue,
       sortValue,
       filterValue,
