@@ -72,12 +72,11 @@ export class PropertyController {
     address: propertyAddressType,
     @Request() req,
   ) {
-    const splittedTags = tags.trim().split(',');
     return this.propertyService.createProperty({
       title,
       price,
       description,
-      tags: splittedTags,
+      tags: tags,
       coOrdinates,
       images,
       propertyType,
