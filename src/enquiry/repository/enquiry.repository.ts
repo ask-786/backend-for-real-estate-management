@@ -1,8 +1,8 @@
 import { Enquiry, EnquiryDocument } from './../model/enquiry.model';
-import { EntityRepository } from 'src/database/entity.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery, PopulateOptions } from 'mongoose';
+import { EntityRepository } from 'src/repository/entity.repository';
 
 @Injectable()
 export class EnquiryRepository extends EntityRepository<EnquiryDocument> {

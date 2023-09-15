@@ -1,4 +1,3 @@
-import { EntityRepository } from 'src/database/entity.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   Notification,
@@ -6,16 +5,15 @@ import {
 } from './../model/notification.model';
 import { Injectable } from '@nestjs/common';
 import { FilterQuery, Model, PopulateOptions } from 'mongoose';
+import { EntityRepository } from 'src/repository/entity.repository';
 
 @Injectable()
 export class NotificationRepository extends EntityRepository<NotificationDocument> {
-  notificationModel: Model<NotificationDocument>;
   constructor(
     @InjectModel(Notification.name)
-    notificationModel: Model<NotificationDocument>,
+    private notificationModel: Model<NotificationDocument>,
   ) {
     super(notificationModel);
-    this.notificationModel = notificationModel;
   }
 
   async findAndPopulate(

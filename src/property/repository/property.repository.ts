@@ -1,8 +1,8 @@
 import { Property, PropertyDocument } from './../model/property.model';
-import { EntityRepository } from 'src/database/entity.repository';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
+import { EntityRepository } from 'src/repository/entity.repository';
 
 @Injectable()
 export class PropertyRepository extends EntityRepository<PropertyDocument> {

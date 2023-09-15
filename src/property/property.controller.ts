@@ -3,13 +3,13 @@ import { PropertyService } from './property.service';
 import {
   Body,
   Controller,
-  Request,
   Get,
   Param,
   UseGuards,
   Query,
   Put,
   Delete,
+  Request,
 } from '@nestjs/common';
 import {
   coOrdinates as cordType,
@@ -47,6 +47,7 @@ export class PropertyController {
     return this.propertyService.getProperty(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('property/:id')
   deleteProperty(@Param('id') id: string) {
     return this.propertyService.deleteProperty(id);
@@ -70,7 +71,7 @@ export class PropertyController {
     @Body('propertyType') propertyType: propType,
     @Body('address')
     address: propertyAddressType,
-    @Request() req,
+    @Request() req: { user: { _id: any } },
   ) {
     return this.propertyService.createProperty({
       title,
@@ -98,15 +99,14 @@ export class PropertyController {
     @Body('propertyType') propertyType: propType,
     @Body('address')
     address: propertyAddressType,
-    @Request() req,
+    @Request() req: { user: { _id: any } },
   ) {
-    const splittedTags: string[] = tags.trim().split(',');
     if (images) {
       return this.propertyService.updateProperty(id, {
         title,
         price,
         description,
-        tags: splittedTags,
+        tags,
         coOrdinates,
         images,
         propertyType,
@@ -118,7 +118,7 @@ export class PropertyController {
         title,
         price,
         description,
-        tags: splittedTags,
+        tags,
         coOrdinates,
         propertyType,
         address,
@@ -129,7 +129,7 @@ export class PropertyController {
 
   @UseGuards(JwtAuthGuard)
   @Get('get-own-properties')
-  async getOwnProperties(@Request() req) {
+  async getOwnProperties(@Request() req: { user: { _id: string } }) {
     return await this.propertyService.getOwnProperties(req.user._id);
   }
 }

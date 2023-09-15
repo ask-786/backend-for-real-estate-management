@@ -16,7 +16,7 @@ export class NotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getNotifications(@Request() req): Promise<{
+  async getNotifications(@Request() req: { user: { _id: string } }): Promise<{
     notifications: NotificationDocument[];
   }> {
     const notifications = await this.notificationsService.getNotifications(
@@ -26,7 +26,7 @@ export class NotificationsController {
   }
   @UseGuards(JwtAuthGuard)
   @Get('get-count')
-  async getNotificationsCount(@Request() req) {
+  async getNotificationsCount(@Request() req: { user: { _id: string } }) {
     const count = await this.notificationsService.getNotificationsCount(
       req.user._id,
     );
@@ -35,7 +35,7 @@ export class NotificationsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async changeReadStatus(@Param('id') id) {
+  async changeReadStatus(@Param('id') id: string) {
     const resutl = await this.notificationsService.changeReadStatus(id);
     if (resutl.modifiedCount > 0) {
       return { status: true };

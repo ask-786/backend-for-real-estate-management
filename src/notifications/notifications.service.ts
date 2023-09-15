@@ -5,7 +5,7 @@ import {
 } from './model/notification.model';
 import { NotificationRepository } from './repository/notification.repository';
 import { Injectable } from '@nestjs/common';
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Property } from 'src/property/model/property.model';
 import { Enquiry } from 'src/enquiry/model/enquiry.model';
 
@@ -19,10 +19,10 @@ export class NotificationsService {
     user: mongoose.Types.ObjectId,
     type: NotificationTypeEnum,
     property: mongoose.Types.ObjectId,
-    enquiry,
+    enquiry: string,
     content?: string,
   ): Promise<NotificationDocument> {
-    const hello = await this.notificationRepository.create({
+    return await this.notificationRepository.create({
       title,
       content,
       from,
@@ -31,7 +31,6 @@ export class NotificationsService {
       enquiry,
       property,
     });
-    return hello;
   }
 
   async getNotifications(id: string): Promise<NotificationDocument[]> {
@@ -54,7 +53,9 @@ export class NotificationsService {
     });
   }
 
-  async changeReadStatus(id: string) {
+  async changeReadStatus(
+    id: string,
+  ): Promise<ReturnType<(typeof Model)['updateOne']>> {
     return await this.notificationRepository.updateOne(
       {
         _id: new mongoose.Types.ObjectId(id),

@@ -49,7 +49,7 @@ export abstract class EntityRepository<T extends Document> {
     }
   }
 
-  async count(entityFilterQuery: FilterQuery<T>) {
+  async count(entityFilterQuery: FilterQuery<T>): Promise<number> {
     try {
       return await this.entityModel.find(entityFilterQuery).count();
     } catch (err) {
@@ -74,7 +74,9 @@ export abstract class EntityRepository<T extends Document> {
     }
   }
 
-  async deleteOne(entityDeleteQuery: FilterQuery<T>) {
+  async deleteOne(
+    entityDeleteQuery: FilterQuery<T>,
+  ): Promise<ReturnType<(typeof Model)['deleteOne']>> {
     try {
       return await this.entityModel.deleteOne(entityDeleteQuery);
     } catch (err) {
@@ -85,7 +87,7 @@ export abstract class EntityRepository<T extends Document> {
   async updateOne(
     entityUpdateQuery: FilterQuery<T>,
     entityUpdateData: UpdateQuery<T>,
-  ) {
+  ): Promise<ReturnType<(typeof Model)['updateOne']>> {
     try {
       return await this.entityModel.updateOne(
         entityUpdateQuery,
@@ -99,7 +101,7 @@ export abstract class EntityRepository<T extends Document> {
   async findOneAndUpdate(
     entityUpdateQuery: FilterQuery<T>,
     entityUpdateData: UpdateQuery<T>,
-  ) {
+  ): Promise<T> {
     try {
       return await this.entityModel.findOneAndUpdate(
         entityUpdateQuery,

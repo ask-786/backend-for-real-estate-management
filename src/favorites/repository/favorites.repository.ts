@@ -1,8 +1,8 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { Favorites, FavoritesDocument } from './../model/favorites.model';
-import { EntityRepository } from 'src/database/entity.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, PopulateOptions } from 'mongoose';
+import { EntityRepository } from 'src/repository/entity.repository';
 
 export class FavoritesRepository extends EntityRepository<FavoritesDocument> {
   favoritesModel: Model<FavoritesDocument>;
