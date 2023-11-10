@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 

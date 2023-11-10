@@ -58,13 +58,11 @@ export class EnquiryService {
       );
       if (property !== null) {
         const createdEnquiry = await this.enquiryRepostory.create({
-          title: enquiryData.title,
+          ...enquiryData,
           sender: new mongoose.Types.ObjectId(user),
           propertyOwner: new mongoose.Types.ObjectId(property.owner),
           senderEmail: email,
-          content: enquiryData.content,
           property: property._id,
-          topic: enquiryData.topic,
         });
         await this.propertyService.pushEnquirers(property._id, user);
         return createdEnquiry;

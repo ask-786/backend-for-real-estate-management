@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
+import type {
+  UserDocument,
+  UserRegistrationData,
+} from '../users/model/user.model';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -29,23 +33,15 @@ export class AuthService {
     }
   }
 
-  login(user: any) {
-    const payload = {
-      email: user.email,
-      _id: user._id,
-      phone: user.phone,
-      firstname: user.firstname,
-      lastname: user.lastname,
-    };
-
+  login(user: UserDocument) {
     return {
       user,
       status: true,
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(user.toObject()),
     };
   }
 
-  async registerUser(user: any) {
+  async registerUser(user: UserRegistrationData) {
     const isExists = await this.userService.userExists(user.phone, user.email);
     if (isExists === null) {
       const result = await this.userService.addUser(user);

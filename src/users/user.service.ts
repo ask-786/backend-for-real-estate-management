@@ -25,7 +25,7 @@ export class UserService {
     }
   }
 
-  async userExists(phone: number, email: string) {
+  async userExists(phone: string, email: string) {
     try {
       return await this.userRepository.exists({ $or: [{ phone }, { email }] });
     } catch (err) {
