@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -22,7 +21,7 @@ export class AuthService {
   async validateUser(id: string, password: string) {
     const user = await this.userService.findUser(id);
     if (user === null) {
-      throw new BadRequestException('Couldnt find user');
+      throw new UnauthorizedException('Password or username is invalid');
     } else {
       const check = await bcrypt.compare(password, user.password);
       if (check) {
