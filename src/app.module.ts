@@ -13,7 +13,7 @@ import { NotificationsModule } from './notifications/notifications.module';
   imports: [
     UserModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB),
+    MongooseModule.forRoot(process.env.LOCAL_DB),
     AuthModule,
     PropertyModule,
     EnquiryModule,

@@ -25,8 +25,4 @@ export class AwsService {
     const uploadUrl = await this.s3.getSignedUrlPromise('putObject', params);
     return { uploadUrl };
   }
-
-  getS3UploadUrl() {
-    return this.generateUplaodUrl();
-  }
 }

@@ -4,31 +4,22 @@ import { AuthService } from './auth.service';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { UserDocument } from 'src/users/model/user.model';
+import { ApiOperation } from '@nestjs/swagger';
+import { UserLoginDto, UserReginstrationDto } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  async postSignup(
-    @Body('firstname') firstname: string,
-    @Body('lastname') lastname: string,
-    @Body('email') email: string,
-    @Body('phone') phone: string,
-    @Body('password') password: string,
-  ) {
-    return await this.authService.registerUser({
-      firstname,
-      lastname,
-      email,
-      phone,
-      password,
-    });
+  @ApiOperation({ summary: 'User Signup', description: 'Registers a new user' })
+  async postSignup(@Body() body: UserReginstrationDto) {
+    return this.authService.registerUser({ ...body });
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  postLogin(@Req() req) {
+  postLogin(@Req() req: Request, @Body() body: UserLoginDto) {
     return this.authService.login(req.user as UserDocument);
   }
 

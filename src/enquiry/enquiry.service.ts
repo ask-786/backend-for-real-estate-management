@@ -20,9 +20,7 @@ export class EnquiryService {
 
   async getUserEnquiries(userId: string) {
     const enquiries = await this.enquiryRepostory.findAndPopulate(
-      {
-        propertyOwner: new mongoose.Types.ObjectId(userId),
-      },
+      { propertyOwner: new mongoose.Types.ObjectId(userId) },
       { path: 'property', model: Property.name },
     );
     return { enquiries };
@@ -30,9 +28,7 @@ export class EnquiryService {
 
   async getUserSentEnquiries(userId: string) {
     const enquiries = await this.enquiryRepostory.findAndPopulate(
-      {
-        sender: new mongoose.Types.ObjectId(userId),
-      },
+      { sender: new mongoose.Types.ObjectId(userId) },
       { path: 'property', model: Property.name },
     );
     return { enquiries };

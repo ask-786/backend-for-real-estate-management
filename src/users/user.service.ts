@@ -1,10 +1,10 @@
 import { UserRepository } from './repository/user.repository';
-import { UserRegistrationData } from './model/user.model';
 import {
   Injectable,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { UserReginstrationDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,7 @@ export class UserService {
     return user;
   }
 
-  async addUser(user: UserRegistrationData) {
+  async addUser(user: UserReginstrationDto) {
     try {
       return await this.userRepository.create(user);
     } catch (err) {

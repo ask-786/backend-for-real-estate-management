@@ -5,11 +5,9 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
-import type {
-  UserDocument,
-  UserRegistrationData,
-} from '../users/model/user.model';
+import type { UserDocument } from '../users/model/user.model';
 import * as bcrypt from 'bcrypt';
+import { UserReginstrationDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +18,7 @@ export class AuthService {
 
   async validateUser(id: string, password: string) {
     const user = await this.userService.findUser(id);
-    if (user === null) {
+    if (!user) {
       throw new UnauthorizedException('Password or username is invalid');
     } else {
       const check = await bcrypt.compare(password, user.password);
@@ -33,22 +31,26 @@ export class AuthService {
   }
 
   login(user: UserDocument) {
+    const { password, ...userDetails } = user.toObject();
     return {
-      user,
+      user: userDetails,
       status: true,
       access_token: this.jwtService.sign(user.toObject()),
     };
   }
 
-  async registerUser(user: UserRegistrationData) {
+  async registerUser(user: UserReginstrationDto) {
     const isExists = await this.userService.userExists(user.phone, user.email);
+
     if (isExists === null) {
-      const result = await this.userService.addUser(user);
-      return {
-        status: true,
-        user: result,
-        message: 'User Successfully registered',
-      };
+      try {
+        const result = await this.userService.addUser(user);
+        return {
+          status: true,
+          user: result,
+          message: 'User Successfully registered',
+        };
+      } catch (e) {}
     } else {
       throw new ConflictException('User alread exists');
     }

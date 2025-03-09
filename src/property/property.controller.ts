@@ -55,8 +55,8 @@ export class PropertyController {
 
   @UseGuards(JwtAuthGuard)
   @Get('get-s3-upload-url')
-  getS3UploadUrl() {
-    return this.aswService.getS3UploadUrl();
+  async getS3UploadUrl() {
+    return await this.aswService.generateUplaodUrl();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -101,30 +101,19 @@ export class PropertyController {
     address: propertyAddressType,
     @Request() req: { user: { _id: any } },
   ) {
-    if (images) {
-      return this.propertyService.updateProperty(id, {
-        title,
-        price,
-        description,
-        tags,
-        coOrdinates,
-        images,
-        propertyType,
-        address,
-        owner: req.user._id,
-      });
-    } else {
-      return this.propertyService.updateProperty(id, {
-        title,
-        price,
-        description,
-        tags,
-        coOrdinates,
-        propertyType,
-        address,
-        owner: req.user._id,
-      });
-    }
+    const obj: Record<string, unknown> = {
+      title,
+      price,
+      description,
+      tags,
+      coOrdinates,
+      propertyType,
+      address,
+      owner: req.user._id,
+    };
+    if (images) obj.images = images;
+
+    return this.propertyService.updateProperty(id, obj);
   }
 
   @UseGuards(JwtAuthGuard)

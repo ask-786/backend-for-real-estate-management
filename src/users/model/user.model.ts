@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
@@ -41,7 +41,7 @@ UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) {
     next();
   } else {
-    bcrypt.hash(this.password, 10, (err, hashedPassword) => {
+    hash(this.password, 10, (err, hashedPassword) => {
       if (err) {
         throw new InternalServerErrorException(
           'Something went wrong while securing your password',
@@ -53,11 +53,3 @@ UserSchema.pre('save', function (next) {
     });
   }
 });
-
-export interface UserRegistrationData {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  password: string;
-}
